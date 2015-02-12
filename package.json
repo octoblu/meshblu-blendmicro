@@ -1,20 +1,21 @@
 {
   "name": "meshblu-blendmicro",
-  "version": "1.0.0",
-  "description": "",
-  "main": "blendblu.js",
-  "dependencies": {
-    "blend-micro-io": "^1.2.1",
-    "remote-io": "^0.4.0",
-    "johnny-five": "^0.8.40",
-    "meshblu": "^1.13.1",
-    "skynet-serial": "^0.14.0"
-  },
-  "devDependencies": {},
- "scripts": {
-    "start": "node blendblu.js",
+  "repository": "octoblu/meshblu-blendmicro",
+  "version": "1.0.8",
+  "scripts": {
+    "start": "node command.js",
     "test": "exit 0"
   },
-  "author": "virgilvox <moheeb.zara@citrix.com> (http://app.octoblu.com/)",
-  "license": "ISC"
+  "dependencies": {
+    "meshblu": "^1.9.0",
+    "debug": "^2.1.0",
+     "blend-micro-io": "^1.2.1",
+    "remote-io": "^0.4.0",
+    "johnny-five": "^0.8.40",
+    "meshblu-vserial": "*"
+  },
+  "keywords": [
+    "meshblu-connector",
+    "gateblu"
+  ]
 }
