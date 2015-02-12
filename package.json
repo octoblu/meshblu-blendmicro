@@ -1,7 +1,7 @@
 {
   "name": "meshblu-blendmicro",
   "repository": "octoblu/meshblu-blendmicro",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "scripts": {
     "start": "node command.js",
     "test": "exit 0"
@@ -9,7 +9,7 @@
   "dependencies": {
     "meshblu": "^1.9.0",
     "debug": "^2.1.0",
-     "blend-micro-io": "^1.2.1",
+    "blend-micro-io": "^1.2.2",
     "remote-io": "^0.4.0",
     "johnny-five": "^0.8.40",
     "meshblu-vserial": "*"
