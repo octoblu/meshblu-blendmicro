@@ -12,7 +12,7 @@
     "blend-micro-io": "^1.2.2",
     "remote-io": "^0.4.0",
     "johnny-five": "^0.8.40",
-    "meshblu-vserial": "*"
+    "meshblu-virtual-serial": "^1.0.0",
   },
   "keywords": [
     "meshblu-connector",
