@@ -1,9 +1,8 @@
 'use strict';
 var Plugin = require('./index').Plugin;
 var meshblu = require('meshblu');
-var RemoteIO = require('remote-io');
-var blendMicroIO = require('blend-micro-io');;
-var SkynetSerialPort = require('meshblu-virtual-serial').SerialPort;
+var fs = require("fs");
+var sent = false;
 
 var Connector = function(config) {
   var conx = meshblu.createConnection({
@@ -19,38 +18,67 @@ var Connector = function(config) {
   };
 
   process.on('uncaughtException', consoleError);
-  conx.on('notReady', consoleError);
+  conx.on('notReady', function(data) {
+    if(config.uuid == "uuid-here"){
+      conx.register({
+        "type": "device:blendmicro"
+      }, function(data) {
+        config.uuid = data.uuid;
+        config.token = data.token;
+        fs.writeFile('meshblu.json', JSON.stringify(config), function(err) {
+          var claim = 'https://app.octoblu.com/claim/' + config.uuid + '/' + config.token;
+          console.log("CLAIM THIS DEVICE! -> ", claim);
+
+          conx.authenticate({
+            "uuid": config.uuid,
+            "token": config.token
+          }, function(data) {
+
+          });
+          if (err) return;
+        });
+      });
+
+
+    }
+  });
   conx.on('error', consoleError);
 
-  var plugin = new Plugin();
+    var plugin = new Plugin();
+
 
   conx.on('ready', function(){
+    var claim = 'https://app.octoblu.com/claim/' + config.uuid + '/' + config.token;
+    console.log("CLAIM THIS DEVICE IF YOU HAVEN'T! -> ", claim);
     conx.whoami({uuid: config.uuid}, function(device){
-      plugin.setOptions(device.options || {});
+      plugin.setOptions(device.options || plugin.options);
       conx.update({
         uuid: config.uuid,
         token: config.token,
         optionsSchema: plugin.optionsSchema,
         options:       plugin.options
       });
-    }); 
 
-    var sendId = '*';
-    var ssp = new SkynetSerialPort(conx, sendId);
-
-
-  var io = new blendMicroIO();
-    //virtual serialport + any io
-    var remoteio = new RemoteIO({
-      serial: ssp,
-      io: io
+      setTimeout(function () {
+        conx.whoami({uuid: config.uuid}, function(device){
+          plugin.StartBoard(device);
+        });
+      }, 3000);
     });
+if(!sent){
+    plugin.Read();
+    sent = true;
+  }
 
 
-
+  conx.on('message', function(){
+    try {
+      plugin.onMessage.apply(plugin, arguments);
+    } catch (error){
+      console.error(error.message);
+      console.error(error.stack);
+    }
   });
-
-  
 
   conx.on('config', function(){
     try {
@@ -63,10 +91,37 @@ var Connector = function(config) {
 
   plugin.on('message', function(message){
     conx.message(message);
-    console.log(message);
+  });
+
+  plugin.on('updateConfig', function(message){
+    conx.update({
+      uuid: config.uuid,
+      token: config.token,
+      "messageSchema": message.messageSchema,
+      "messageFormSchema":  message.messageFormSchema,
+      "optionsSchema":  message.optionsSchema,
+      "optionsForm":  message.optionsForm
+    });
+  });
+
+  plugin.on('updateOptions', function(message){
+    conx.update({
+      uuid: config.uuid,
+      token: config.token,
+      options:  message
+    });
+  });
+
+  plugin.on('config', function(){
+    conx.whoami({uuid: config.uuid}, function(device){
+      plugin.checkConfig(device);
+    });
   });
 
   plugin.on('error', consoleError);
+
+});
+
 };
 
 module.exports = Connector;
