@@ -1,1 +1,1 @@
-# meshblu-edison
+# meshblu-blendmicro
