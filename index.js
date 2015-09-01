@@ -147,7 +147,11 @@ Plugin.prototype.StartBoard = function(device){
 
   var self = this;
 
+<<<<<<< HEAD
+/*  if(!boardReady){
+=======
   if(!boardReady){
+>>>>>>> be1201f927b77eb4a4a3316fd4d8f66fab74889c
     board = new five.Board({
     io: new blendmicro()
   });
@@ -160,11 +164,30 @@ Plugin.prototype.StartBoard = function(device){
 
     }); // end johnny-five board onReady
 
+<<<<<<< HEAD
+  } */
+=======
   }
+>>>>>>> be1201f927b77eb4a4a3316fd4d8f66fab74889c
 
 
 }
 
+<<<<<<< HEAD
+board = new five.Board({
+io: new blendmicro()
+});
+
+board.on('ready', function() {
+
+  boardReady = true;
+
+
+
+}); // end johnny-five board onReady
+
+=======
+>>>>>>> be1201f927b77eb4a4a3316fd4d8f66fab74889c
 Plugin.prototype.onMessage = function(message){
   debug(message);
   var payload = message.payload;
