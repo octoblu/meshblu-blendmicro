@@ -580,7 +580,7 @@ Plugin.prototype.onConfig = function(device){
   this.checkConfig(device);
 };
 
-Plugin.prototype.options = function(options){
+Plugin.prototype.setOptions = function(options){
   this.options = options;
 };
 
