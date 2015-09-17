@@ -164,7 +164,8 @@ Plugin.prototype.StartBoard = function(device){
 
     board.on('ready', function() {
       boardReady = true;
-      this.Read();
+      self.configBoard(device);
+      self.Read();
     }); // end johnny-five board onReady
 
   };
@@ -575,7 +576,7 @@ Plugin.prototype.configBoard = function(data) {
 }; // end configBoard
 
 Plugin.prototype.onConfig = function(device){
-  this.setOptions(device.options||{});
+  this.setOptions(device.options||testOptions);
   if(!started){this.StartBoard(device);}
   this.checkConfig(device);
 };
